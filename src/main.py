@@ -84,7 +84,7 @@ def predict_form():
 		return render_template_string(INDEX_HTML, result=result, temperature=temperature, cough=cough, duration_days=duration)
 
 
-@app.route('/api/predict', methods=['POST'])
+@app.route('/api/predict', methods=['POST']) 
 def predict_api():
 		if not request.is_json:
 				return jsonify({"error": "Se requiere JSON en el body"}), 400
