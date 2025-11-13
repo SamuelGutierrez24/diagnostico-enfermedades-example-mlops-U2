@@ -6,7 +6,6 @@ from threading import Lock
 
 app = Flask(__name__)
 
-# Configuración del archivo de log
 PREDICTIONS_LOG_FILE = 'predictions_log.json'
 log_lock = Lock()
 
@@ -24,7 +23,7 @@ def log_prediction(temperature: float, cough: int, duration_days: int, predictio
 		}
 		
 		with log_lock:
-				# Leer predicciones existentes
+				
 				if os.path.exists(PREDICTIONS_LOG_FILE):
 						try:
 								with open(PREDICTIONS_LOG_FILE, 'r', encoding='utf-8') as f:
@@ -34,10 +33,10 @@ def log_prediction(temperature: float, cough: int, duration_days: int, predictio
 				else:
 						predictions = []
 				
-				# Agregar nueva predicción
+				
 				predictions.append(prediction_entry)
 				
-				# Guardar en el archivo
+				
 				try:
 						with open(PREDICTIONS_LOG_FILE, 'w', encoding='utf-8') as f:
 								json.dump(predictions, f, ensure_ascii=False, indent=2)
@@ -82,7 +81,7 @@ def get_statistics():
 						"fecha_ultima_prediccion": None
 				}
 		
-		# Contar predicciones por categoría
+		
 		category_counts = {
 				"NO ENFERMO": 0,
 				"ENFERMEDAD LEVE": 0,
@@ -96,11 +95,11 @@ def get_statistics():
 				if category in category_counts:
 						category_counts[category] += 1
 		
-		# Obtener últimas 5 predicciones
-		last_5 = predictions[-5:] if len(predictions) >= 5 else predictions
-		last_5.reverse()  # Más reciente primero
 		
-		# Fecha de la última predicción
+		last_5 = predictions[-5:] if len(predictions) >= 5 else predictions
+		last_5.reverse()
+		
+		
 		last_date = predictions[-1]["fecha_hora"] if predictions else None
 		
 		return {
@@ -119,7 +118,6 @@ def simple_diagnosis(temperature: float, cough: int, duration_days: int) -> str:
 		except Exception:
 				raise ValueError("Parámetros inválidos. temperature(float), cough(0/1), duration_days(int) son requeridos.")
 
-		# ENFERMEDAD TERMINAL: casos más graves
 		if (t >= 40.0 and d >= 14) or (t >= 39.5 and c == 1 and d >= 21) or (d >= 60):
 				return "ENFERMEDAD TERMINAL"
 
@@ -148,7 +146,7 @@ INDEX_HTML = """
 			button { margin-top:1rem; padding:10px 16px }
 			.result { margin-top:1rem; padding:12px; border-radius:6px; background:#f3f3f3 }
 			.export-section { margin-top:2rem; padding:16px; border-radius:8px; border:1px solid #b3d9e6 }
-			.export-btn { background:#0066cc; color:white; border:none; cursor:pointer; border-radius:4px }
+			.export-btn { color:black; border:none; cursor:pointer; border-radius:4px }
 			.export-btn:hover { background:#0052a3 }
 		</style>
 	</head>
@@ -201,7 +199,6 @@ def predict_form():
 		duration = request.form.get('duration_days')
 		try:
 				result = simple_diagnosis(temperature, cough, duration)
-				# Registrar la predicción
 				log_prediction(temperature, cough, duration, result)
 		except ValueError as e:
 				return render_template_string(INDEX_HTML, result=str(e), temperature=temperature, cough=cough, duration_days=duration), 400
@@ -221,7 +218,6 @@ def predict_api():
 
 		try:
 				prediction = simple_diagnosis(data['temperature'], data['cough'], data['duration_days'])
-				# Registrar la predicción
 				log_prediction(
 						float(data['temperature']),
 						int(bool(int(data['cough']))),
