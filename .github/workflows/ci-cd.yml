@@ -3,7 +3,7 @@ name: CI/CD Pipeline - PR a Main
 on:
   pull_request:
     branches:
-      - main
+      - dev-example-test-pipeline
 
 jobs:
   comment-start:
