@@ -11,6 +11,10 @@ def simple_diagnosis(temperature: float, cough: int, duration_days: int) -> str:
 		except Exception:
 				raise ValueError("Parámetros inválidos. temperature(float), cough(0/1), duration_days(int) son requeridos.")
 
+		# ENFERMEDAD TERMINAL: casos más graves
+		if (t >= 40.0 and d >= 14) or (t >= 39.5 and c == 1 and d >= 21) or (d >= 60):
+				return "ENFERMEDAD TERMINAL"
+
 		if d >= 30:
 				return "ENFERMEDAD CRÓNICA"
 
