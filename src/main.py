@@ -146,7 +146,7 @@ INDEX_HTML = """
 			button { margin-top:1rem; padding:10px 16px }
 			.result { margin-top:1rem; padding:12px; border-radius:6px; background:#f3f3f3 }
 			.export-section { margin-top:2rem; padding:16px; border-radius:8px; border:1px solid #b3d9e6 }
-			.export-btn { color:black; border:none; cursor:pointer; border-radius:4px }
+			.export-btn { background:#007bff; color:white; border:none; cursor:pointer; border-radius:4px }
 			.export-btn:hover { background:#0052a3 }
 		</style>
 	</head>
