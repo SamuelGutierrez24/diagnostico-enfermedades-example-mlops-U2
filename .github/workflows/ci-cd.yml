@@ -2,10 +2,10 @@ name: CI/CD Pipeline
 on:
   pull_request:
     branches:
-      - main
+      - dev-example-test-pipeline
   push:
     branches:
-      - main
+      - dev-example-test-pipeline
 
 jobs:
   #===========Evento#1========================
